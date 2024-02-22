@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/product_style.css' %}">
+</head>
+
+<body style="background-color: rgb(248, 239, 172);">
+   {% if messages %}
+      {% for message in messages %}
+         {% if message.tags == "error" %}
+            <p style="color: aqua;">{{message}}</p>
+         {% else %}
+            <p style="color: green;">{{message}}</p> 
+            {% endif %}   
+       {% endfor %}
+   {% endif %}           
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/myapp/home">Home</a></li>
+                <li><a href="/myapp/home">Product</a></li>
+
+                {% if user.is_authenticated %}
+                <li><a href="/myapp/logout">Logout</a></li>
+                <li><a href="/myapp/view_cart">Cart <span style="background-color: rgb(18, 120, 55);">{{cart_count}}</span></a></li>
+                {% else %}
+                <li><a href="/myapp/login">Login</a></li>
+                <li><a href="/myapp/register">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header><br>
+    <h3>Welcome {{user_data}}</h3>
+    <div class="container">
+        <div class="filter_area">
+           <div class="by_category">
+              <h2>Filter By Categoty</h2>
+              <ul>
+                 <li><a href="/myapp/home">All</a></li>
+                 <li><a href="/myapp/filter/1">By Mobile</a></li>
+                 <li><a href="/myapp/filter/2">By Clothes</a></li>
+                 <li><a href="/myapp/filter/3">By Shoes</a></li>
+              </ul>
+           </div>
+  <div>------------------------------------------------</div>
+           <div class="by_price">
+              <h2>Filter By Price</h2>
+              <form action="/myapp/price">
+                 <label for="">Min:</label>
+                 <input type="number" name="min"> <br><br>
+                 <label for="">Max:</label>
+                 <input type="number" name="'max"> <br><br>
+                 <input type="submit">
+              </form>
+           </div>
+  <div>------------------------------------------------</div>
+           <div class="sort_by_price">
+              <h2>Sort By Price</h2>
+              <ul>
+                 <li><a href="/myapp/sort/desc">High to Low</a></li>
+                 <li><a href="/myapp/sort/asc">Low to High</a></li>
+              </ul>
+           </div>
+  <div>------------------------------------------------</div>    
+           <div class="by_rating">
+              <h2>Sort By Rating</h2>
+              <ul>
+                 <li><a href="/myapp/rating/2">2 and above</a></li>
+                 <li><a href="/myapp/rating/4">4 and above</a></li>
+              </ul>
+           </div>
+  <div>------------------------------------------------</div>        
+        </div>
+        <div class="product_area">
+         {% for product in products %}
+           <div class="card">
+              <div class="card-items">
+                 <!-- <img src=" {% static 'images/shirt.webp' %} " alt=""> -->
+                 <img src="{{product.image.ur}}" alt="">
+                 <div class="card-text">
+                    <p>{{product.name|upper}}</p>
+                    <p>Price:{{product.price}}</p>
+                    <p>Rating:{{product.rating}}</p>
+                    <button id="add_to_cart_btn"><a href="/myapp/add_to_cart/{{product.id}}">Add to Cart</a></button>
+                    <button id="buy_now_btn"><a href="/myapp/product_detail/{{product.id}}"> view more </a></button>
+                 </div>
+              </div>
+           </div>
+           {% endfor %}
+        </div>
+     </div>
+</body>
+
+</html>
